@@ -1,0 +1,63 @@
+Metadata-Version: 2.4
+Name: spec2ir-demo
+Version: 0.1.0
+Summary: Spec (YAML) -> Test IR (YAML) demo using pluggable LLM + Playwright a11y tree
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: pyyaml>=6.0.1
+Requires-Dist: pydantic>=2.6.0
+Requires-Dist: httpx>=0.27.0
+Requires-Dist: playwright>=1.41.0
+
+# spec2ir-demo
+
+A minimal, runnable engineering demo: **Spec (YAML) -> Test IR (YAML)** using:
+
+- Playwright (Python) to capture **a11y tree** (`page.accessibility.snapshot()`)
+- A pluggable LLM provider (external configurable)
+- Strict IR validation via Pydantic
+
+## Quick start
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+
+pip install -e .
+python -m playwright install
+```
+
+### Run with Mock provider (offline)
+
+This captures a11y tree from the target URL and outputs a deterministic demo IR.
+
+```bash
+spec2ir --spec specs/waf_login_1.yaml --provider mock --capture-a11y --out specs/waf_login_1.ir.yaml
+```
+
+### Run with an OpenAI-compatible gateway
+
+Set env vars:
+
+```bash
+export LLM_BASE_URL="https://your-llm-gateway/v1"
+export LLM_API_KEY="xxxxx"
+export LLM_MODEL="your-model"
+```
+
+Then:
+
+```bash
+spec2ir --spec specs/waf_login_1.yaml --provider openai_compat --capture-a11y --out specs/waf_login_1.ir.yaml
+```
+
+## Notes
+
+- **No raw secrets**: any `fill.value` should be variables like `${ADMIN_USER}` `${ADMIN_PASS}`.
+- Locator preference: `testid > role+name > label > text > css/xpath`.
+
+## Files
+
+- `specs/` sample spec + generated IR
+- `src/spec2ir/ui_context.py` a11y capture via Playwright
+- `src/spec2ir/llm/` pluggable LLM providers

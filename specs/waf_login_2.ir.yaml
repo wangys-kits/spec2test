@@ -1,0 +1,35 @@
+id: waf_login_1
+desc: 登录功能正向测试
+env_base_url: https://10.2.97.255:9443
+ignore_https_errors: true
+actions:
+  - op: goto
+    url: https://10.2.97.255:9443/
+    wait_until: domcontentloaded
+  - op: fill
+    locator:
+      kind: label
+      value: 用户名
+      name: username input
+    value: ${ADMIN_USER}
+  - op: fill
+    locator:
+      kind: label
+      value: 密码
+      name: password input
+    value: ${ADMIN_PASS}
+  - op: click
+    locator:
+      kind: role
+      value: button
+      name: 登录
+  - op: wait_for
+    target: url
+    value: "**/statistics*"
+    timeout_ms: 30000
+expects:
+  - kind: url_is
+    value: "**/statistics*"
+tags:
+  - login
+  - positive
