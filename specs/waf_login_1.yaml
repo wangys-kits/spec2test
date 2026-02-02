@@ -1,7 +1,0 @@
-id: waf_login_1
-desc: 登录功能正向测试
-prepare:
-  - 打开浏览器，访问 https://10.2.97.255:9443/，等待页面加载成功
-steps:
-  - action: 用户名输入admin，密码输入228bcPzF，点击登录按钮
-expect: 登录成功，自动跳转到 https://10.2.97.255:9443/statistics页面
