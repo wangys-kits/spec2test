@@ -26,7 +26,6 @@ def _load_env():
 
 from spec2ir.spec_model import SpecCase
 from spec2ir.converter import spec_to_ir
-from spec2ir.llm.mock import MockProvider
 from spec2ir.ui_context import (
     extract_first_url,
     capture_a11y_tree,
@@ -36,8 +35,6 @@ from spec2ir.ui_context import (
 
 
 def _get_llm(provider: str):
-    if provider == "mock":
-        return MockProvider()
     if provider == "openai_compat":
         from spec2ir.llm.openai_compat import OpenAICompatProvider
         return OpenAICompatProvider()
@@ -73,7 +70,7 @@ def main():
     _load_env()
     p = argparse.ArgumentParser()
     p.add_argument("--spec", required=True, help="Path to spec yaml")
-    p.add_argument("--provider", default="mock", choices=["mock", "openai_compat"])
+    p.add_argument("--provider", default="openai_compat", choices=["openai_compat"])
     p.add_argument("--out", default=None, help="Output IR yaml path")
     p.add_argument("--capture-a11y", action="store_true", help="Capture a11y tree with Playwright and feed it to LLM")
     p.add_argument("--a11y-url", default=None, help="Override URL for a11y capture if not found in prepare")

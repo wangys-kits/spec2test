@@ -3,7 +3,7 @@
 一个从人类 Spec (YAML) 到 Test IR (YAML) 的端到端示例，包含：
 
 - Playwright 捕获 **A11y 可访问性树**，帮助生成鲁棒 locator。
-- 可插拔 LLM Provider（Mock / OpenAI 兼容），支持流式输出。
+- 可插拔 LLM Provider（OpenAI 兼容），支持流式输出。
 - 严格的 IR Schema 校验（Pydantic）。
 - `spec2ir_runner`：基于 Playwright 的 IR 执行器，可直接在浏览器里验证步骤。
 
@@ -21,22 +21,14 @@ python -m playwright install
 
 ## 生成 IR（spec2ir CLI）
 
-### Mock provider（离线）
-
-This captures a11y tree from the target URL and outputs a deterministic demo IR.
-
-```bash
-spec2ir --spec specs/waf_login_1.yaml --provider mock --capture-a11y --out specs/waf_login_1.ir.yaml
-```
-
 ### OpenAI 兼容 LLM
 
-`.env` 或环境中需要包含：
+`.env` 或环境中需要包含（`.env` 中不需要 `export`）：
 
 ```bash
-export LLM_BASE_URL="https://your-llm-gateway/v1"
-export LLM_API_KEY="xxxxx"
-export LLM_MODEL="your-model"
+LLM_BASE_URL="https://your-llm-gateway/v1"
+LLM_API_KEY="xxxxx"
+LLM_MODEL="your-model"
 # 可选：LLM_STREAM=1 开启流式输出
 ```
 
